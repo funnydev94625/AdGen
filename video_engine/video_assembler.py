@@ -5,15 +5,60 @@ Video assembly module using MoviePy for creating final video.
 import os
 import numpy as np
 from typing import List, Optional, Tuple
-from moviepy.editor import (
-    ImageClip, AudioFileClip, CompositeVideoClip, 
-    CompositeAudioClip, VideoFileClip
-)
-from moviepy.video.compositing.concatenate import concatenate_videoclips
-from moviepy.video.fx.resize import resize
-from moviepy.video.fx.fadein import fadein
-from moviepy.video.fx.fadeout import fadeout
-from moviepy.audio.fx.volumex import volumex
+
+# Try to import moviepy with error handling
+try:
+    from moviepy.editor import (
+        ImageClip, AudioFileClip, CompositeVideoClip, 
+        CompositeAudioClip, VideoFileClip
+    )
+    from moviepy.video.compositing.concatenate import concatenate_videoclips
+    from moviepy.video.fx.resize import resize
+    from moviepy.video.fx.fadein import fadein
+    from moviepy.video.fx.fadeout import fadeout
+    from moviepy.audio.fx.volumex import volumex
+    MOVIEPY_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: MoviePy not available: {e}")
+    print("Video assembly features will be limited. Please install moviepy:")
+    print("pip install moviepy imageio imageio-ffmpeg")
+    MOVIEPY_AVAILABLE = False
+    
+    # Create dummy classes for graceful degradation
+    class ImageClip:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("MoviePy not available")
+    
+    class AudioFileClip:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("MoviePy not available")
+    
+    class CompositeVideoClip:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("MoviePy not available")
+    
+    class CompositeAudioClip:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("MoviePy not available")
+    
+    class VideoFileClip:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("MoviePy not available")
+    
+    def concatenate_videoclips(*args, **kwargs):
+        raise ImportError("MoviePy not available")
+    
+    def resize(*args, **kwargs):
+        raise ImportError("MoviePy not available")
+    
+    def fadein(*args, **kwargs):
+        raise ImportError("MoviePy not available")
+    
+    def fadeout(*args, **kwargs):
+        raise ImportError("MoviePy not available")
+    
+    def volumex(*args, **kwargs):
+        raise ImportError("MoviePy not available")
 
 # Fix for PIL ANTIALIAS deprecation in newer Pillow versions
 try:
@@ -28,6 +73,9 @@ class VideoAssembler:
     
     def __init__(self, config):
         self.config = config
+        if not MOVIEPY_AVAILABLE:
+            print("Warning: VideoAssembler initialized but MoviePy is not available")
+            print("Video assembly features will be limited")
         
     def assemble_video(
         self, 
@@ -48,6 +96,10 @@ class VideoAssembler:
         Returns:
             Path to the final video file, or None if assembly failed
         """
+        if not MOVIEPY_AVAILABLE:
+            print("Error: MoviePy is not available. Cannot assemble video.")
+            return None
+            
         try:
             print("Starting video assembly...")
             

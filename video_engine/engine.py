@@ -9,7 +9,8 @@ from .config import Config
 from .script_generator import ScriptGenerator, Scene
 from .runway_generator import RunwayGenerator
 from .tts_generator import TTSGenerator
-from .video_assembler import VideoAssembler
+from .video_assembler import VideoAssembler, MOVIEPY_AVAILABLE
+from .video_assembler_fallback import VideoAssemblerFallback
 from .image_generator import ImageGenerator
 from .pdf_generator import PDFGenerator
 
@@ -29,7 +30,13 @@ class VideoEngine:
         self.script_generator = ScriptGenerator(self.config)
         self.visual_generator = RunwayGenerator(self.config)
         self.tts_generator = TTSGenerator(self.config)
-        self.video_assembler = VideoAssembler(self.config)
+        
+        # Use fallback assembler if MoviePy is not available
+        if MOVIEPY_AVAILABLE:
+            self.video_assembler = VideoAssembler(self.config)
+        else:
+            print("Using fallback video assembler due to MoviePy import issues")
+            self.video_assembler = VideoAssemblerFallback(self.config)
         
         # Create necessary directories
         self._create_directories()
