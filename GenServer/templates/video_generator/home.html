@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Video Generation Engine{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="fas fa-video me-3"></i>Video Generation Engine
+            </h1>
+            <p class="lead text-muted">
+                Transform your text prompts into stunning videos using AI-powered content generation.
+                Create professional videos with images, narration, and smooth transitions.
+            </p>
+        </div>
+
+        <!-- Generation Form -->
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-magic me-2"></i>Generate Your Video
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form id="videoForm">
+                    <div class="mb-4">
+                        <label for="prompt" class="form-label fw-bold">
+                            <i class="fas fa-edit me-1"></i>Enter your prompt:
+                        </label>
+                        <textarea 
+                            class="form-control" 
+                            id="prompt" 
+                            name="prompt" 
+                            rows="4" 
+                            placeholder="Describe what you want to create in your video..."
+                            required
+                        ></textarea>
+                        <div class="form-text">
+                            Be specific about the content, style, and any particular elements you want to include.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+                            <i class="fas fa-play me-2"></i>Generate Video
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div id="progressSection" class="card mt-4" style="display: none;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-cog fa-spin me-2"></i>Generating Video...
+                </h5>
+                <div class="progress mb-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         id="progressBar" role="progressbar" style="width: 0%">
+                        0%
+                    </div>
+                </div>
+                <p class="text-muted mb-0" id="progressMessage">
+                    Initializing video generation...
+                </p>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="card mt-4" style="display: none;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-success">
+                    <i class="fas fa-check-circle me-2"></i>Video Generated Successfully!
+                </h5>
+                <p class="text-muted">Your video has been created and is ready for download.</p>
+                <a href="#" class="btn btn-success btn-lg" id="downloadBtn">
+                    <i class="fas fa-download me-2"></i>Download Video
+                </a>
+            </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="errorSection" class="card mt-4 border-danger" style="display: none;">
+            <div class="card-body">
+                <h5 class="card-title text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Generation Failed
+                </h5>
+                <p class="text-danger mb-0" id="errorMessage"></p>
+            </div>
+        </div>
+
+        <!-- Example Prompts -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-lightbulb me-2"></i>Example Prompts
+                </h3>
+            </div>
+            {% for example in examples %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">{{ example.title }}</h6>
+                        <p class="card-text text-muted small">{{ example.description }}</p>
+                        <button class="btn btn-outline-primary btn-sm" 
+                                onclick="useExample('{{ example.prompt|escapejs }}')">
+                            <i class="fas fa-copy me-1"></i>Use This Prompt
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-star me-2"></i>Features
+                </h3>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <i class="fas fa-image fa-lg"></i>
+                    </div>
+                    <h5>AI Image Generation</h5>
+                    <p class="text-muted">Generate high-quality images from text descriptions using advanced AI models.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="text-center">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <i class="fas fa-microphone fa-lg"></i>
+                    </div>
+                    <h5>Text-to-Speech</h5>
+                    <p class="text-muted">Convert your text into natural-sounding voice narration.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="text-center">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 60px; height: 60px;">
+                        <i class="fas fa-film fa-lg"></i>
+                    </div>
+                    <h5>Video Assembly</h5>
+                    <p class="text-muted">Combine images, audio, and transitions into professional videos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function useExample(prompt) {
+    document.getElementById('prompt').value = prompt;
+    document.getElementById('prompt').focus();
+}
+
+document.getElementById('videoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const prompt = document.getElementById('prompt').value.trim();
+    if (!prompt) {
+        alert('Please enter a prompt');
+        return;
+    }
+    
+    // Show progress section
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('resultSection').style.display = 'none';
+    document.getElementById('errorSection').style.display = 'none';
+    document.getElementById('generateBtn').disabled = true;
+    
+    // Start generation
+    generateVideo(prompt);
+});
+
+function generateVideo(prompt) {
+    fetch('/generate/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+        },
+        body: JSON.stringify({ prompt: prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            pollTaskStatus(data.task_id);
+        } else {
+            showError(data.error || 'Failed to start video generation');
+        }
+    })
+    .catch(error => {
+        showError('Network error: ' + error.message);
+    });
+}
+
+function pollTaskStatus(taskId) {
+    const interval = setInterval(() => {
+        fetch(`/status/${taskId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateProgress(data.progress, data.message);
+                
+                if (data.status === 'completed') {
+                    clearInterval(interval);
+                    showSuccess(data.video_path);
+                } else if (data.status === 'failed') {
+                    clearInterval(interval);
+                    showError(data.error || 'Video generation failed');
+                }
+            } else {
+                clearInterval(interval);
+                showError(data.error || 'Failed to get task status');
+            }
+        })
+        .catch(error => {
+            clearInterval(interval);
+            showError('Network error: ' + error.message);
+        });
+    }, 2000);
+}
+
+function updateProgress(progress, message) {
+    const progressBar = document.getElementById('progressBar');
+    const progressMessage = document.getElementById('progressMessage');
+    
+    progressBar.style.width = progress + '%';
+    progressBar.textContent = progress + '%';
+    progressMessage.textContent = message;
+}
+
+function showSuccess(videoPath) {
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('resultSection').style.display = 'block';
+    document.getElementById('generateBtn').disabled = false;
+    
+    const downloadBtn = document.getElementById('downloadBtn');
+    const filename = videoPath.split('/').pop();
+    downloadBtn.href = `/download/${filename}/`;
+}
+
+function showError(message) {
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('errorSection').style.display = 'block';
+    document.getElementById('generateBtn').disabled = false;
+    document.getElementById('errorMessage').textContent = message;
+}
+</script>
+{% endblock %}

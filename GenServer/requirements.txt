@@ -1,0 +1,16 @@
+# Django Web Server Requirements
+Django>=4.2.0,<5.0.0
+Pillow>=10.0.0
+requests>=2.31.0
+
+# Video Engine Dependencies (from parent project)
+openai>=1.0.0
+runwayml>=0.1.0
+moviepy>=1.0.3
+gTTS>=2.3.0
+pydub>=0.25.1
+
+# Additional dependencies for web server
+python-decouple>=3.8
+whitenoise>=6.5.0
+gunicorn>=21.2.0
