@@ -1,16 +1,34 @@
 # Django Web Server Requirements
 Django>=4.2.0,<5.0.0
-Pillow>=10.0.0
-requests>=2.31.0
-
-# Video Engine Dependencies (from parent project)
-openai>=1.0.0
-runwayml>=0.1.0
-moviepy>=1.0.3
-gTTS>=2.3.0
-pydub>=0.25.1
-
-# Additional dependencies for web server
 python-decouple>=3.8
 whitenoise>=6.5.0
 gunicorn>=21.2.0
+
+# Core dependencies
+requests>=2.31.0
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# Video processing
+moviepy>=1.0.3
+ffmpeg-python>=0.2.0
+
+# Audio processing - Fixed for Python 3.13+ compatibility
+pydub>=0.25.1
+audioop-lts>=0.1.0  # Backport of audioop for Python 3.13+
+gTTS>=2.3.0
+
+# AI/ML APIs
+openai>=1.0.0
+runwayml>=0.1.0
+
+# PDF generation
+reportlab>=4.0.0
+
+# Optional: For better audio processing
+# librosa>=0.10.0  # Uncomment if you want advanced audio features
+
+# Development dependencies (optional)
+# pytest>=7.4.0
+# black>=23.0.0
+# flake8>=6.0.0
