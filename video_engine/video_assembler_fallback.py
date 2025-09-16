@@ -18,26 +18,26 @@ try:
     from moviepy.video.fx.fadeout import fadeout
     from moviepy.audio.fx.volumex import volumex
     MOVIEPY_AVAILABLE = True
-    except ImportError:
-        try:
-            # Try importing individual components
-            from moviepy.video.io.VideoFileClip import VideoFileClip
-            from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
-            from moviepy.video.VideoClip import VideoClip
-            from moviepy.audio.io.AudioFileClip import AudioFileClip
-            from moviepy.video.fx.resize import resize
-            from moviepy.video.fx.fadein import fadein
-            from moviepy.video.fx.fadeout import fadeout
-            from moviepy.audio.fx.volumex import volumex
-            from moviepy.video.compositing.concatenate import concatenate_videoclips
-            from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
-            from moviepy.audio.AudioClip import CompositeAudioClip
-            
-            # Create aliases
-            ImageClip = VideoClip
-            AudioFileClip = AudioFileClip
-            
-            MOVIEPY_AVAILABLE = True
+except ImportError:
+    try:
+        # Try importing individual components
+        from moviepy.video.io.VideoFileClip import VideoFileClip
+        from moviepy.video.io.ImageSequenceClip import ImageSequenceClip
+        from moviepy.video.VideoClip import VideoClip
+        from moviepy.audio.io.AudioFileClip import AudioFileClip
+        from moviepy.video.fx.resize import resize
+        from moviepy.video.fx.fadein import fadein
+        from moviepy.video.fx.fadeout import fadeout
+        from moviepy.audio.fx.volumex import volumex
+        from moviepy.video.compositing.concatenate import concatenate_videoclips
+        from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+        from moviepy.audio.AudioClip import CompositeAudioClip
+        
+        # Create aliases
+        ImageClip = VideoClip
+        AudioFileClip = AudioFileClip
+        
+        MOVIEPY_AVAILABLE = True
     except ImportError:
         MOVIEPY_AVAILABLE = False
         print("Warning: MoviePy not available. Video assembly will be limited.")
